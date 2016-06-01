@@ -21,21 +21,11 @@ List::~List(){
 };
 
 int List::size(){
-	Node* pNode=nullptr;
-	if (Head.pNext != &Tail) {
-		pNode = Head.pNext;
-	};
+	Node* pNode=Head.pNext;
 	int n = 0;
-	while (pNode != 0){
-		//pNode = pNode->pNext;
+	while (pNode != &Tail){
 		n++;
-		if (pNode == Tail.pPrev) {
-			pNode = nullptr;
-		}
-		else {
-			pNode = pNode->pNext;
-			//n++;
-		};
+		pNode = pNode->pNext;
 	};
 	return n;
 };
@@ -58,7 +48,7 @@ bool List::RemoveOne(const Circle& circle){
 			this->m_size--;
 			return true;
 		}
-		pNode = pNode->pNext;
+		pNode = pNode->pNext;//переход на следующий элемент в списке
 	}
 	return false;
 };
@@ -66,14 +56,18 @@ bool List::RemoveOne(const Circle& circle){
 int List::Remove(const Circle& circle) {
 	int n = 0;
 	Node* pNode = Head.pNext;
+	Node* pNodeNext = nullptr;
 	while (pNode != &Tail) {
+		pNodeNext = pNode->pNext;
 		if (pNode->m_data == circle) {
+			
 			delete pNode;
 			this->m_size--;
 			n++;
 		}
-		pNode = pNode->pNext;
+		pNode = pNodeNext;
 	}
+//	delete pNodeNext;
 	return n;
 };
 
@@ -84,4 +78,36 @@ void List::Empty() {
 	Head.pNext = &Tail;
 	Tail.pPrev = &Head;
 	this->m_size = 0;
+};
+
+void List::sort() {//пузырьковая сортировка
+	Node* p = Head.pNext;
+	int j = m_size;
+	while (p != &Tail)
+	{
+		Node* np = p;
+		for (int i = 0; i <j - 1; i++)
+		{
+			if (np->m_data.calculateSquare() > np->pNext->m_data.calculateSquare())
+			{
+				Node* p1 = np->pNext;
+				Node* p2 = np->pPrev;
+				
+				p2->pNext = p1;
+				np->pNext->pNext->pPrev = np->pNext;
+				
+				np->pNext = np->pNext->pNext;
+				
+				p1->pPrev = p2;
+				p1->pNext = np;
+				
+				np->pPrev = p1;
+					
+			}
+			np = np->pNext;
+		}
+		p = p->pNext;
+		j--;
+	}
+
 };
