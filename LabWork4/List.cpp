@@ -1,6 +1,9 @@
 #pragma once
 #include "List.h"
 #include "Node.h"
+#include <string>
+#include <iostream>
+#include <fstream>
 
 List::List(){//используем для создания пустого списка
 	this->Head.pNext = &Tail;
@@ -12,6 +15,41 @@ List::List(){//используем для создания пустого списка
 	//this->pPrev = nullptr;
 	//};
 };
+
+List::List(const List & other)
+{
+	Head.pNext = &Tail;
+	Tail.pPrev = &Head;
+	m_size = 0;
+	if (other.m_size != 0) {
+		Node* tmp = other.Head.pNext;
+		for (int i = 0; i < other.m_size; i++)
+		{
+			this->AddToTail(tmp->m_data);
+			tmp = tmp->pNext;
+		}
+	}
+}
+
+List::List(List && other)
+{
+	Head.pNext = &Tail;
+	Tail.pPrev = &Head;
+	m_size = 0;
+	if (other.m_size != 0)
+	{
+		Head.pNext = other.Head.pNext;
+		Head.pNext->pPrev = &Head;
+		other.Head.pNext = &Tail;
+		Tail.pPrev = other.Tail.pPrev;
+		Tail.pPrev->pNext = &Tail;
+		other.Tail.pPrev = &Head;
+		m_size = other.m_size;
+		other.m_size = 0;
+	}
+}
+
+
 
 List::~List(){
 	while (Head.pNext != &Tail){
@@ -126,3 +164,89 @@ std::ostream& operator<<(std::ostream & os, const List& ls)
 	}
 	return os;
 };
+
+std::ofstream& operator<<(std::ofstream& ofs, const List& ls)
+{
+	ofs << "" << ls.m_size << std::endl;
+	Node* p = ls.Head.pNext;
+	while (p != &ls.Tail)
+	{
+		ofs << p->m_data << std::endl;
+		p = p->pNext;
+	}
+	return ofs;
+};
+
+std::ifstream& operator >> (std::ifstream& ifs, List& ls)
+{
+	int count=0;
+	ifs >> count;
+	
+	int x;
+	int y;
+	int radius;
+	for (int i = 0; i < count; i++)
+	{
+		ifs >> radius >> y >> x;
+		Circle circle(radius, x, y);
+		ls.AddToTail(circle);
+	}
+	return ifs;
+};
+
+
+List & List::operator=(const List & other)
+{
+	if (this != &other)
+	{
+		Node* pThis;
+		Node* pOther;
+		if (other.m_size == 0) //Если размер Other = 0
+		{
+			this->Empty();
+			return *this;
+		}
+		
+		int count = (this->m_size < other.m_size) ? this->m_size : other.m_size;
+		pThis = Head.pNext;
+		pOther = other.Head.pNext;
+		for (int i = 0; i < count; i++)
+		{
+			pThis->m_data = pOther->m_data;
+			pThis = pThis->pNext;
+			pOther = pOther->pNext;
+		}
+		Node* pThisEnd = Tail.pPrev;
+		for (int i = count; i< this->m_size; i++)
+		{
+			delete pThisEnd;
+			pThisEnd = Tail.pPrev;
+		}
+		for (int i = count; i < other.m_size; i++)
+		{
+			this->AddToTail(pOther->m_data);
+			pOther = pOther->pNext;
+		}
+		m_size = other.m_size;
+	}
+	return *this;
+}
+
+List & List::operator=(List && other)
+{
+	if (this != &other) {
+		this->Empty();
+		if (other.m_size != 0) {
+			Head.pNext = other.Head.pNext;
+			Head.pNext->pPrev = &Head;
+			other.Head.pNext = &Tail;
+			Tail.pPrev = other.Tail.pPrev;
+			Tail.pPrev->pNext = &Tail;
+			other.Tail.pPrev = &Head;
+			m_size = other.m_size;
+			other.m_size = 0;
+		}
+	}
+	return *this;
+}
+

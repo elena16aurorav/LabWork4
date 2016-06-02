@@ -1,6 +1,8 @@
 #pragma once
 #include "Node.h"
 #include <ostream>
+#include <fstream>
+
 
 class List{
 	Node Head;// фиктивный элемент, который является признаком начала списка
@@ -9,7 +11,13 @@ class List{
 
 public:
 	List();
+	List(const List& other);
+	List(List&& other);
+
 	~List();
+
+	List& operator=(const List& other);
+	List& operator=(List&& other);
 
 	int size();
 	void AddToHead(const Circle& circle);
@@ -27,4 +35,6 @@ public:
 	void Empty();
 	void sort();//пузырьковая сортировка
 	friend std::ostream& operator<<(std::ostream& os, const List& ls);
+	friend std::ofstream& operator<<(std::ofstream& ofs, const List& ls);
+	friend std::ifstream& operator>> (std::ifstream& ifs, List& ls);
 };

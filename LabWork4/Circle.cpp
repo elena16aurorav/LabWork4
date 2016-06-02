@@ -1,5 +1,6 @@
 #include "Circle.h"
 #include <iostream>
+#include <fstream>
 
 Circle::Circle(int radius, int x, int y) : center(x, y) {
 	this->radius = radius;
@@ -18,4 +19,10 @@ std::ostream& operator<<(std::ostream & os, const Circle& circle)
 {
 	os << "Circle: " << circle.center << " radius=" << circle.radius << std::endl;
 	return os;
+};
+
+std::ofstream& operator<<(std::ofstream& ofs, const Circle& circle)
+{
+	ofs << circle.center << " " << circle.radius;
+	return ofs;
 };

@@ -11,5 +11,6 @@ public:
 	double calculateSquare();
 
 	friend std::ostream& operator<<(std::ostream& os, const Circle& circle);
+	friend std::ofstream& operator<<(std::ofstream& ofs, const Circle& circle);
 
 };
