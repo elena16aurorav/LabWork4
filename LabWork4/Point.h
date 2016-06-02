@@ -1,3 +1,5 @@
+#include <iostream>
+
 class Point
 {
 	int m_x;
@@ -8,6 +10,8 @@ public:
 	//конструктор с параметрами, у 
 	//которого все параметры имеют значения по умолчанию
 	//эквивалентен конструктору по умолчанию.
+	friend std::ostream& operator<<(std::ostream& os, const Point& point);
+
 	friend class Circle;
 	
 };

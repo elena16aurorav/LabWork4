@@ -1,4 +1,5 @@
 #include "List.h"
+#include <fstream>
 
 int main()
 {
@@ -26,6 +27,12 @@ int main()
 
 	list.sort();
 	list.size();
+
+	std::cout << list;
+
+	std::ofstream file("List.txt");
+	file << list << std::endl;
+	file.close();
 
 	return 0;
 }

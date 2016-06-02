@@ -1,4 +1,6 @@
+#pragma once
 #include "Node.h"
+#include <ostream>
 
 class List{
 	Node Head;// фиктивный элемент, который является признаком начала списка
@@ -22,9 +24,7 @@ public:
 	//которых совпадает со значением параметра. 
 	//Метод возвращает количество удаленных элементов.
 	int Remove(const Circle& circle);//
-
 	void Empty();
-
 	void sort();//пузырьковая сортировка
-
+	friend std::ostream& operator<<(std::ostream& os, const List& ls);
 };

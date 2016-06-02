@@ -1,4 +1,6 @@
+#pragma once
 #include "List.h"
+#include "Node.h"
 
 List::List(){//используем для создания пустого списка
 	this->Head.pNext = &Tail;
@@ -110,4 +112,17 @@ void List::sort() {//пузырьковая сортировка
 		j--;
 	}
 
+};
+
+std::ostream& operator<<(std::ostream & os, const List& ls)
+//классы ostream и ofstream связаны наследованием (с.156)
+{
+	Node* p;
+	p=ls.Head.pNext;
+	while (p != &ls.Tail)
+	{
+		os << p->m_data;
+		p = p->pNext;
+	}
+	return os;
 };
